@@ -25,8 +25,8 @@ $outputpath = $outputfolder + $date
 $sessionOptions = New-Object WinSCP.SessionOptions
 $sessionOptions.Protocol = [WinSCP.Protocol]::Sftp
 $sessionOptions.HostName = $line.hostname
-$sessionOptions.UserName = $line.username
-$sessionOptions.Password = $line.password
+$sessionOptions.UserName = "transfer"
+$sessionOptions.Password = "Qualc0mBackup-SW"
 $sessionOptions.SshHostKeyFingerprint = $line.sshhostfingerprint
 $session = New-Object WinSCP.Session
 
