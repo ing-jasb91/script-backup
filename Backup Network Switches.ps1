@@ -3,10 +3,10 @@
 #Website: myworldofit.net
 
 #Load the .NET assembly for WinSCP
-Add-Type -Path "C:\Program Files (x86)\WinSCP Automation\WinSCPnet.dll"
+Add-Type -Path "C:\Program Files (x86)\WinSCP\WinSCPnet.dll"
 
 #Import the CSV containing switch details and store it in a variable
-$switches = Import-Csv -Path "C:\Network Switch Backup\switches.csv"
+$switches = Import-Csv -Path "C:\Users\jhon.serrano\Desktop\BACKUP-SWITCHES\switches.csv"
 
 #Get the current system date in the format year/month/date which will be used to name the backup files
 $date = Get-Date -Format yyyy-M-d
@@ -15,7 +15,7 @@ $date = Get-Date -Format yyyy-M-d
 Foreach ($line in $switches) {
 
 #Define the folder to store the output in and create it if it does not exist (if the folder exists already this will generate a non-blocking error)
-$outputfolder = "C:\Network Switch Backup\Backups\" + $line.hostname + "\"
+$outputfolder = "C:\Users\jhon.serrano\Desktop\BACKUP-SWITCHES\Backups\" + $line.hostname + "\"
 New-Item $outputfolder -ItemType Directory
 
 #Define the path to store the result of the download
@@ -25,8 +25,10 @@ $outputpath = $outputfolder + $date
 $sessionOptions = New-Object WinSCP.SessionOptions
 $sessionOptions.Protocol = [WinSCP.Protocol]::Sftp
 $sessionOptions.HostName = $line.hostname
+### Cambio de parámetros de crendenciales ###
 $sessionOptions.UserName = "transfer"
 $sessionOptions.Password = "Qualc0mBackup-SW"
+#############################################
 $sessionOptions.SshHostKeyFingerprint = $line.sshhostfingerprint
 $session = New-Object WinSCP.Session
 
