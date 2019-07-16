@@ -1,2 +1,2 @@
 hostname,username,password,sshhostfingerprint
-sw-serverroom,manager,YourSwitchPassword,ssh-rsa 2048 59:af:14:rt:8d:c6:31:9a:a3:f9:kp:9d:8d:e5:f8:97
+10.0.12.10,xxxxx,yyyyy,ssh-rsa 2048 38:fb:cc:31:bf:02:b8:c5:3c:44:55:77:51:0f:f0:8e
