@@ -40,7 +40,7 @@ $transferOptions = New-Object WinSCP.TransferOptions
 $transferOptions.TransferMode = [WinSCP.TransferMode]::Binary
 
 #Download the startup-config (the result of the last 'write memory' from the switches CLI) and save it to the outputpath
-$transferResult = $session.GetFiles("/cfg/startup-config", $outputpath, $False, $transferOptions)
+$session.GetFiles("/cfg/startup-config", $outputpath, $False, $transferOptions)
 
 #Disconnect from the server
 $session.Dispose()
