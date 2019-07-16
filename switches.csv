@@ -1,2 +1,3 @@
 hostname,username,password,sshhostfingerprint
 10.0.12.10,xxxxx,yyyyy,ssh-rsa 2048 38:fb:cc:31:bf:02:b8:c5:3c:44:55:77:51:0f:f0:8e
+10.0.12.2,xxxxx,yyyyy,ssh-rsa 2048 46:1b:fa:81:5b:07:6c:c7:b3:91:70:fc:d8:18:86:ab
