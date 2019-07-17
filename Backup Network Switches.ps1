@@ -1,6 +1,6 @@
-﻿#Created by: James Preston of The Queen's College, Oxford
-#Version: 1.0 on 02/11/2015 17:05
-#Website: myworldofit.net
+﻿# Recreated by: ing.jasb91
+# Based by James Preston of The Queen's College, Oxford // Website: myworldofit.net
+# version 1.0 alpha 2019/07/16
 
 #Load the .NET assembly for WinSCP
 Add-Type -Path "C:\Program Files (x86)\WinSCP\WinSCPnet.dll"
@@ -16,8 +16,12 @@ Foreach ($line in $switches) {
 
 #Define the folder to store the output in and create it if it does not exist (if the folder exists already this will generate a non-blocking error)
 $outputfolder = "C:\Users\jhon.serrano\Desktop\BACKUP-SWITCHES\Backups\" + $line.hostname + "\"
+#Variable "folderexists" creada para comprobar que existe el directorio del dispositivo "hostname".
+$folderexists = Test-Path $outputfolder
+#El codigo se anida en un condicional para evitar que se ejecute el codigo, si se cumple la condición anterior.
+if($folderexists -eq $False){
 New-Item $outputfolder -ItemType Directory
-
+}
 #Define the path to store the result of the download
 $outputpath = $outputfolder + $date
 
@@ -33,16 +37,19 @@ $sessionOptions.SshHostKeyFingerprint = $line.sshhostfingerprint
 $session = New-Object WinSCP.Session
 
 #Connect to the host
-$session.Open($sessionOptions)
-
+$fileexists = Test-Path $outputpath -PathType Leaf
+if ($fileexists -eq $False){
+    $session.Open($sessionOptions)
+}
 #Define the transfer options
 $transferOptions = New-Object WinSCP.TransferOptions
 $transferOptions.TransferMode = [WinSCP.TransferMode]::Binary
 
 #Download the startup-config (the result of the last 'write memory' from the switches CLI) and save it to the outputpath
-$session.GetFiles("/cfg/startup-config", $outputpath, $False, $transferOptions)
-
+# Variable "fileexists" para comprobar existencia del archivo de configuración
+if ($fileexists -eq $False){
+    $session.GetFiles("/cfg/startup-config", $outputpath, $False, $transferOptions)
+}
 #Disconnect from the server
 $session.Dispose()
-
 }
