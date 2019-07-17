@@ -35,6 +35,8 @@ $sessionOptions.Password = "Qualc0mBackup-SW"
 #############################################
 $sessionOptions.SshHostKeyFingerprint = $line.sshhostfingerprint
 $session = New-Object WinSCP.Session
+##### New variable for distingh device type
+$devicetype = $line.typedevice
 
 #Connect to the host
 $fileexists = Test-Path $outputpath -PathType Leaf
@@ -48,7 +50,12 @@ $transferOptions.TransferMode = [WinSCP.TransferMode]::Binary
 #Download the startup-config (the result of the last 'write memory' from the switches CLI) and save it to the outputpath
 # Variable "fileexists" para comprobar existencia del archivo de configuración
 if ($fileexists -eq $False){
-    $session.GetFiles("/cfg/startup-config", $outputpath, $False, $transferOptions)
+# Switch Case To distinguish between types of devices [0 = HP Aruba/Procurve; 1 = Allied Telesis]
+    switch ( $devicetype )
+    {
+        0 { $session.GetFiles("/cfg/startup-config", $outputpath, $False, $transferOptions) }
+        1 { $session.GetFiles("/flash:/default.cfg", $outputpath, $False, $transferOptions) }
+    }
 }
 #Disconnect from the server
 $session.Dispose()
