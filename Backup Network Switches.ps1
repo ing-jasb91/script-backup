@@ -40,7 +40,7 @@ Foreach ($line in $switches) {
 
 # Download the startup-config (the result of the last 'write memory' from the switches CLI) and save it to the outputpath
     if ($fileexists -eq $False){
-# Switch Case To distinguish between types of devices [0 = HP Aruba/Procurve; 1 = Allied Telesis]
+# Switch Case to distinguish between types of devices [0 = HP Aruba/Procurve; 1 = Allied Telesis]
         switch ( $devicetype )
         {
             0 { $session.GetFiles("/cfg/startup-config", $outputpath, $False, $transferOptions) }
