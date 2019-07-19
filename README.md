@@ -13,7 +13,7 @@ Por ejemplo en C:\AUTO-BACKUP\
 Clonar este repositorio en la carpeta de su preferencia:
 git clone https://github.com/ing-jasb91/script-backup.git
 
-Cambiar las variables ($Add-Type, $switches, $outputfolder) a los directorios donde deberían apuntar
+En el archivo "Backup Network Switches.ps1", cambiar las variables ($Add-Type, $switches, $outputfolder) a los directorios donde deberían apuntar.
 
 Modificar en el archivo "switches.csv" los datos de los dispositivos según la disposición de la tabla .csv
 En el paramétro de typedevice del archivo csv, coloque: n HP Aruba/Procurve (0), Allied Telesis (1).
