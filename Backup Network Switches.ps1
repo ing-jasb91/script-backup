@@ -1,21 +1,20 @@
 ﻿# Recreated by: ing.jasb91
 # Based by James Preston of The Queen's College, Oxford // Website: myworldofit.net
-# version 1.0 alpha 2019/07/16
+# version 1.0.1 alpha 2019/07/16
+# Update 2019/07/19
 
-#Load the .NET assembly for WinSCP
+#Load the .NET assembly for WinSCP & main variable
 Add-Type -Path "C:\Program Files (x86)\WinSCP\WinSCPnet.dll"
-
-#Import the CSV containing switch details and store it in a variable
-$switches = Import-Csv -Path "C:\Users\jhon.serrano\Desktop\BACKUP-SWITCHES\switches.csv"
-
-#Get the current system date in the format year/month/date which will be used to name the backup files
+$mainpath = "C:\Users\jhon.serrano\Desktop\BACKUP-SWITCHES\"
+$switches = Import-Csv -Path "$mainpath\switches.csv"
 $date = Get-Date -Format yyyy-M-d
+
 
 #Loop over the lines in the CSV
 Foreach ($line in $switches) {
 
 #Define the folder to store the output in and create it if it does not exist (if the folder exists already this will generate a non-blocking error)
-$outputfolder = "C:\Users\jhon.serrano\Desktop\BACKUP-SWITCHES\Backups\" + $line.hostname + "\"
+$outputfolder = "$mainpath\Backups\" + $line.hostname + "\"
 #Variable "folderexists" creada para comprobar que existe el directorio del dispositivo "hostname".
 $folderexists = Test-Path $outputfolder
 #El codigo se anida en un condicional para evitar que se ejecute el codigo, si se cumple la condición anterior.
@@ -53,10 +52,21 @@ if ($fileexists -eq $False){
 # Switch Case To distinguish between types of devices [0 = HP Aruba/Procurve; 1 = Allied Telesis]
     switch ( $devicetype )
     {
-        0 { $session.GetFiles("/cfg/startup-config", $outputpath, $False, $transferOptions) }
-        1 { $session.GetFiles("/flash:/default.cfg", $outputpath, $False, $transferOptions) }
+        0 { $transferResult = $session.GetFiles("/cfg/startup-config", $outputpath, $False, $transferOptions) }
+        1 { $transferResult = $session.GetFiles("/flash:/default.cfg", $outputpath, $False, $transferOptions) }
     }
 }
-#Disconnect from the server
+# Log para escribir el archivo log.txt y registrar los sucesos del respaldo.
+
+foreach ($transfer in $transferResult.Transfers){
+    if ($fileexists -eq $False){
+        "$(Get-Date -Format "yyyy/MM/dd HH:mm:ss")   Backup of $($sessionOptions.HostName) succeeded" | Out-File -FilePath "$mainpath\log.txt" -Append
+}
+    else{
+        "$(Get-Date -Format "yyyy/MM/dd HH:mm:ss")   The file $($sessionOptions.HostName) already exists" | Out-File -FilePath "$mainpath\log.txt" -Append
+}
+}
+# Disconnect from the server
 $session.Dispose()
 }
+"$(Get-Date -Format "yyyy/MM/dd HH:mm:ss")   End of the process!" | Out-File -FilePath $mainpath\log.txt -Append
