@@ -59,13 +59,10 @@ $transferOptions.TransferMode = [WinSCP.TransferMode]::Binary
 # Variable "fileexists" para comprobar existencia del archivo de configuración
 if ($fileexists -eq $False){
 # Switch Case To distinguish between types of devices [0 = HP Aruba/Procurve; 1 = Allied Telesis]
-# Puede seguir agregando más equipos, descomentando las líneas 67 y 68, pero debe conocer el sistema de archivos y tenerlas en el csv.
     switch ( $devicetype )
     {
         0 { $transferResult = $session.GetFiles("/cfg/startup-config", $outputpath, $False, $transferOptions) }
         1 { $transferResult = $session.GetFiles("/flash:/default.cfg", $outputpath, $False, $transferOptions) }
-        #2 { $session.GetFiles("<ruta del config file del dispositivo>", $outputpath, $False, $transferOptions) }
-        #3 { $session.GetFiles("<ruta del config file del dispositivo>", $outputpath, $False, $transferOptions) }
     }
 }
 # Log para escribir el archivo log.txt y registrar los sucesos del respaldo.
