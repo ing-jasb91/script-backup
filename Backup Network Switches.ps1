@@ -20,35 +20,35 @@ $date = Get-Date -Format yyyy-M-d
 
 
 #Loop over the lines in the CSV
-Foreach ($line in $switches) {
+    Foreach ($line in $switches) {
 
-#Define the folder to store the output in and create it if it does not exist (if the folder exists already this will generate a non-blocking error)
-$outputfolder = "$mainpath\Backups\" + $line.hostname + "\"
-#Variable "folderexists" creada para comprobar que existe el directorio del dispositivo "hostname".
-$folderexists = Test-Path $outputfolder
-#El codigo se anida en un condicional para evitar que se ejecute el codigo, si se cumple la condición anterior.
-if($folderexists -eq $False){
-New-Item $outputfolder -ItemType Directory
-}
-#Define the path to store the result of the download
-$outputpath = $outputfolder + $date
+    #Define the folder to store the output in and create it if it does not exist (if the folder exists already this will generate a non-blocking error)
+    $outputfolder = "$mainpath\Backups\" + $line.hostname + "\"
+    #Variable "folderexists" creada para comprobar que existe el directorio del dispositivo "hostname".
+    $folderexists = Test-Path $outputfolder
+    #El codigo se anida en un condicional para evitar que se ejecute el codigo, si se cumple la condición anterior.
+    if($folderexists -eq $False){
+    New-Item $outputfolder -ItemType Directory
+    }
+    #Define the path to store the result of the download
+    $outputpath = $outputfolder + $date
 
-#Store the session details
-$sessionOptions = New-Object WinSCP.SessionOptions
-$sessionOptions.Protocol = [WinSCP.Protocol]::Sftp
-$sessionOptions.HostName = $line.hostname
-### Cambio de parámetros de crendenciales ###
-$sessionOptions.UserName = $Credentials.GetNetworkCredential().UserName
-$sessionOptions.Password = $Credentials.GetNetworkCredential().Password
-#############################################
-$sessionOptions.SshHostKeyFingerprint = $line.sshhostfingerprint
-$session = New-Object WinSCP.Session
-##### New variable for distingh device type
-$devicetype = $line.typedevice
+    #Store the session details
+    $sessionOptions = New-Object WinSCP.SessionOptions
+    $sessionOptions.Protocol = [WinSCP.Protocol]::Sftp
+    $sessionOptions.HostName = $line.hostname
+    ### Cambio de parámetros de crendenciales ###
+    $sessionOptions.UserName = $Credentials.GetNetworkCredential().UserName
+    $sessionOptions.Password = $Credentials.GetNetworkCredential().Password
+    #############################################
+    $sessionOptions.SshHostKeyFingerprint = $line.sshhostfingerprint
+    $session = New-Object WinSCP.Session
+    ##### New variable for distingh device type
+    $devicetype = $line.typedevice
 
-#Connect to the host
-$fileexists = Test-Path $outputpath -PathType Leaf
-if ($fileexists -eq $False){
+    #Connect to the host
+    $fileexists = Test-Path $outputpath -PathType Leaf
+    if ($fileexists -eq $False){
     $session.Open($sessionOptions)
 }
 #Define the transfer options
