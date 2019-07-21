@@ -1,12 +1,21 @@
 ﻿# Recreated by: ing.jasb91
 # Based by James Preston of The Queen's College, Oxford // Website: myworldofit.net
-# version 1.0.1 alpha 2019/07/16
-# Update 2019/07/19
+# version 1.0.2 qualcomisp (dev) 2019/07/16
+# Update 2019/07/20
+# Añadido modulo de contraseñas más seguras sin el texto claro dentro de este código.
+# Apunta a un archivo llamado cred.xml
 
 #Load the .NET assembly for WinSCP & main variable
 Add-Type -Path "C:\Program Files (x86)\WinSCP\WinSCPnet.dll"
 $mainpath = "C:\Users\jhon.serrano\Desktop\BACKUP-SWITCHES\"
-$switches = Import-Csv -Path "$mainpath\switches.csv"
+$switches = Import-Csv -Path "$mainpath\switches.csv"b
+## Modulo para separar las credenciales del texto claro en el codigo en un archivo xml de PSCredentials #########
+## Referencias:
+## https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.pscredential?view=pscore-6.2.0
+## https://www.jaapbrasser.com/quickly-and-securely-storing-your-credentials-powershell/
+## https://www.jesusninoc.com/system-management-automation-pscredential/
+$credentials = Import-Clixml -Path "$mainpath\cred.xml"
+#################################################################################################################
 $date = Get-Date -Format yyyy-M-d
 
 
@@ -29,8 +38,8 @@ $sessionOptions = New-Object WinSCP.SessionOptions
 $sessionOptions.Protocol = [WinSCP.Protocol]::Sftp
 $sessionOptions.HostName = $line.hostname
 ### Cambio de parámetros de crendenciales ###
-$sessionOptions.UserName = "transfer"
-$sessionOptions.Password = "Qualc0mBackup-SW"
+$sessionOptions.UserName = $Credentials.GetNetworkCredential().UserName
+$sessionOptions.Password = $Credentials.GetNetworkCredential().Password
 #############################################
 $sessionOptions.SshHostKeyFingerprint = $line.sshhostfingerprint
 $session = New-Object WinSCP.Session
