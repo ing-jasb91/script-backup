@@ -1,7 +1,7 @@
 ﻿# Recreated by: ing.jasb91
 # Based by James Preston of The Queen's College, Oxford // Website: myworldofit.net
-# version 1.0.2 qualcomisp (dev) 2019/07/16
-# Update 2019/07/20
+# version 1.0.3 qualcomisp (dev) 2019/07/16
+# Update 2019/07/21
 # Añadido modulo de contraseñas más seguras sin el texto claro dentro de este código.
 # Apunta a un archivo llamado cred.xml
 
