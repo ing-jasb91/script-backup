@@ -1,5 +1,5 @@
 ﻿# Recreated by: ing.jasb91
-# Based by James Preston of The Queen's College, Oxford // Website: myworldofit.net
+# Based by James Preston of The Queen's College, Oxford // Website: https://myworldofit.net/?p=9127
 # version 1.0.4 qualcomisp (dev) 2019/07/16
 # Update 2019/07/26
 # Añadido modulo de contraseñas más seguras sin el texto claro dentro de este código.
