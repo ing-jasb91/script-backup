@@ -81,7 +81,7 @@ Foreach ($line in $switches) {
     }
     }
 # Disconnect from the server
-$session.Dispose()
+    $session.Dispose()
 
 }
 # "$(Get-Date -Format "yyyy/MM/dd HH:mm:ss")   End of the process!" | Out-File -FilePath $mainpath\log.txt -Append
