@@ -1,7 +1,7 @@
 ﻿# Recreated by: ing.jasb91
 # Based by James Preston of The Queen's College, Oxford // Website: myworldofit.net
-# version 1.0.3 qualcomisp (dev) 2019/07/16
-# Update 2019/07/21
+# version 1.0.4 qualcomisp (dev) 2019/07/16
+# Update 2019/07/26
 # Añadido modulo de contraseñas más seguras sin el texto claro dentro de este código.
 # Apunta a un archivo llamado cred.xml
 
@@ -25,7 +25,7 @@ Foreach ($line in $switches) {
     $folderexists = Test-Path $outputfolder
     #El codigo se anida en un condicional para evitar que se ejecute la creación de carpetas, si se cumple la condición anterior.
     if($folderexists -eq $False){
-    New-Item $outputfolder -ItemType Directory
+        New-Item $outputfolder -ItemType Directory
     }
     #Define the path to store the result of the download
     $outputpath = $outputfolder + $date
@@ -46,28 +46,44 @@ Foreach ($line in $switches) {
     # Variable "fileexists" para comprobar existencia del archivo de configuración
     $fileexists = Test-Path $outputpath -PathType Leaf
     if ($fileexists -eq $False){
-    $session.Open($sessionOptions)
+        Try{MethodInvocationException
+            $session.Open($sessionOptions)
+        }
+        Catch{
+            "$(Get-Date -Format "yyyy/MM/dd HH:mm:ss")   Error en la conexión. ¿SFTP está habilitado en el equipo $($deviceName)?" | Out-File -FilePath $mainpath\log.txt -Append
+    }
+    
+    
     #Define the transfer options
     $transferOptions = New-Object WinSCP.TransferOptions
     $transferOptions.TransferMode = [WinSCP.TransferMode]::Binary
     # Download the startup-config (the result of the last 'write memory' from the switches CLI) and save it to the outputpath
     # Switch Case To distinguish between types of devices [0 = HP Aruba/Procurve; 1 = Allied Telesis]
+    # Try Catch añadido
+    Try{
         switch ( $devicetype )
             {
             0 { $transferResult = $session.GetFiles("/cfg/startup-config", $outputpath, $False, $transferOptions) }
             1 { $transferResult = $session.GetFiles("/flash:/default.cfg", $outputpath, $False, $transferOptions) }
             }
+    }
+    Catch{
+        "$(Get-Date -Format "yyyy/MM/dd HH:mm:ss")   Error durante la transferencia del archivo en $($deviceName)?" | Out-File -FilePath $mainpath\log.txt -Append
+    }
 }
 # Log para escribir el archivo log.txt y registrar los sucesos del respaldo.
-foreach ($transfer in $transferResult.Transfers){
-    if ($fileexists -eq $False){
-        "$(Get-Date -Format "yyyy/MM/dd HH:mm:ss")   Backup of $($deviceName) succeeded" | Out-File -FilePath "$mainpath\log.txt" -Append
-}
-    else{
-        "$(Get-Date -Format "yyyy/MM/dd HH:mm:ss")   The file $($deviceName) already exists" | Out-File -FilePath "$mainpath\log.txt" -Append
-}
-}
+    foreach ($transfer in $transferResult.Transfers){
+        if ($fileexists -eq $False){
+            "$(Get-Date -Format "yyyy/MM/dd HH:mm:ss")   Backup process on switch $($deviceName) completed!" | Out-File -FilePath "$mainpath\log.txt" -Append
+    }
+        else{
+            "$(Get-Date -Format "yyyy/MM/dd HH:mm:ss")   The file $($deviceName) already exists" | Out-File -FilePath "$mainpath\log.txt" -Append
+    }
+    }
 # Disconnect from the server
 $session.Dispose()
+
 }
-"$(Get-Date -Format "yyyy/MM/dd HH:mm:ss")   End of the process!" | Out-File -FilePath $mainpath\log.txt -Append
+# "$(Get-Date -Format "yyyy/MM/dd HH:mm:ss")   End of the process!" | Out-File -FilePath $mainpath\log.txt -Append
+
+
