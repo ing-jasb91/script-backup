@@ -5,7 +5,7 @@ Este proyecto es un inicio al programa de respaldo, gracias a James Preston of T
 Se planea utilizar las base de este script para extender sus funcionalidades en otros lenguajes de programación.
 
 Requisitos previos:
-Instalar la última versión de programa WinSCP: https://winscp.net/eng/download.php, o bien descargar la versión Automation y solo registar el dll.
+Instalar la última versión de programa WinSCP: https://winscp.net/eng/download.php, o bien descargar la versión Automation y solo registrar el dll.
 
 Crear directorios en el sistema de archivos Windows, donde se tenga en cuenta la carpeta donde reposarán los archivos internos.
 Por ejemplo en C:\AUTO-BACKUP\
